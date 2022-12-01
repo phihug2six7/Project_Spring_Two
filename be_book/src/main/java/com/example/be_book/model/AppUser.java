@@ -1,5 +1,6 @@
 package com.example.be_book.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,19 +18,33 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppUser {
+    public static final String ROLE_ADMIN = "ADM";
+
+    public static final String ROLE_USER = "USR";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(unique = true)
-    private String username;
-    private String email;
-    private String password;
-    private String name;
-    private LocalDate birthDay;
+    private Long id;
 
-    @OneToMany(mappedBy = "appRole")
-    private List<UserRole> userRoles;
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Bill> bills;
+    @Column(columnDefinition = "varchar(30)")
+    private String username;
+
+    @Column(columnDefinition = "varchar(500)")
+    private String password;
+
+    private String phone;
+
+    private String email;
+
+    private String address;
+
+    private String avatar;
+
+    private double money ;
+
+    @ManyToMany
+    @JsonBackReference
+    @JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<AppRole> appRoles;
 }

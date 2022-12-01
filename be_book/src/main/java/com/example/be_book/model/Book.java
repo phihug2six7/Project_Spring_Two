@@ -1,14 +1,11 @@
 package com.example.be_book.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -18,24 +15,33 @@ import java.util.Set;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
-    private String code;
-    private String author;
-    private String publishingCompany;
-    private int totalPage;
-    private String size;
-    private int amount;
-    private double price;
-    private LocalDate releaseDate;
-    private String img;
+    private Long id;
 
-    private boolean statusDelete = true;
+    @Column(columnDefinition = "varchar(200)")
+    private String title;
+
+    private String publisher;
+
+    private Integer totalPages;
+
+    private Double width;
+
+    private String author;
+
+    private Double height;
+
+    private Double price;
+
+    @Column(columnDefinition = "text")
+    private String imageUrl;
+
+    @Column(columnDefinition = "text")
+    private String summary;
+
+    private Integer quantity;
+
     @ManyToOne
-    @JoinColumn(name = "type", referencedColumnName = "id")
-    private TypeBook typeBook;
-    @OneToMany(mappedBy = "book")
-    @JsonIgnore
-    private Set<BookBill> bookBill;
+    @JoinColumn(name = "category_id")
+    private Category categories;
 
 }

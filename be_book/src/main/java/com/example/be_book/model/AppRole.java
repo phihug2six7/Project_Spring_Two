@@ -1,14 +1,13 @@
 package com.example.be_book.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -17,10 +16,16 @@ import java.util.List;
 @AllArgsConstructor
 public class AppRole {
     @Id
-    private int id;
-    private String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @OneToMany(mappedBy = "appRole")
-    private List<UserRole> userRoles;
+    @Column(columnDefinition = "varchar(30)")
+    private String role;
+
+    @ManyToMany
+    @JsonBackReference
+    @JoinTable(name = "account_role", joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<AppUser> appUsers;
 
 }
